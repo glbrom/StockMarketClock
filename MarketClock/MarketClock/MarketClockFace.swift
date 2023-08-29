@@ -10,16 +10,12 @@ import SwiftUI
 struct MarketClockFace: View {
     
     @State var isDark = false
-   
     
     var body: some View {
         NavigationView {
             Home(isDark: $isDark)
                 .navigationBarHidden(true)
                 .preferredColorScheme(isDark ? .dark : . light)
-//                .background(isDark ? Image("6221798") : Image("6547182"))
-//                .background(Image("6547182"))
-            
         }
     }
 }
@@ -30,29 +26,28 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
 struct Home: View {
-   
+    
     @Binding var isDark: Bool
-
+    
     var width = UIScreen.main.bounds.width
     var hoursAngle: Double {
-//        var localHour = Double(current_Time.hour - 3 + selectedGMT)
+        //        var localHour = Double(current_Time.hour - 3 + selectedGMT)
         let localHour = Double(current_Time.hour)
-//        var localHour = Double(getTime(for: Double(selectedGMT)))
-//                if localHour < 0 {
-//                    localHour += 24
-//                } else if localHour >= 24 {
-//                    localHour -= 24
-//                }
-                return localHour * 15 + 12.5 * Double(current_Time.min) / 60
+        //        var localHour = Double(getTime(for: Double(selectedGMT)))
+        //                if localHour < 0 {
+        //                    localHour += 24
+        //                } else if localHour >= 24 {
+        //                    localHour -= 24
+        //                }
+        return localHour * 15 + 12.5 * Double(current_Time.min) / 60
     }
-
+    
     var minutesAngle: Double {
         Double(current_Time.min) * 6.0
     }
     var secondsAngle: Double {
-         Double(current_Time.sec) * 6.0
+        Double(current_Time.sec) * 6.0
     }
     
     @State var offset3D: CGSize = .zero
@@ -64,41 +59,17 @@ struct Home: View {
     var body: some View {
         
         ZStack {
-//            Color(showDetail ? #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1) : #colorLiteral(red: 0.9450980392, green: 0.9450980392, blue: 0.9450980392, alpha: 0.1))
-//                .edgesIgnoringSafeArea(.all)
             VStack {
-                //            HStack {
-                ////                Spacer()
-                //                Text("Stock Market Clock")
-                //                    .font(.title)
-                //                    .fontWeight(.bold)
-                //
-                ////                Spacer(minLength: 100)
-                //
-                ////                Button(action: { isDark.toggle() }) {
-                ////                    Image(systemName: isDark ? "sun.min.fill" : "moon.fill")
-                ////                        .font(.system(size: 22))
-                ////                        .foregroundColor(isDark ? .red : .red)
-                ////                        .padding()
-                ////                        .background(Color.primary)
-                ////                        .clipShape(Circle())
-                ////                }
-                //            }
-                //            .padding()
-                
                 Text("Stock Market Clock")
-                //                    .font(.title)
                     .font(.custom("DIN Condensed", size: 40))
                     .foregroundColor(isDark ? Color("ColorLight") : Color("ColorDark"))
                     .fontWeight(.bold)
                     .padding(.top, 20)
                 
                 Spacer(minLength: 0)
-                //            Spacer()
                 
                 ZStack {
                     Circle()
-                    //                            .fill(Color("Color").opacity(0.8))
                         .fill(isDark ? Color("ColorDark") : Color("ColorLight"))
                         .opacity(0.9)
                         .blur(radius: 10)
@@ -127,39 +98,29 @@ struct Home: View {
                             .frame(width: 2, height: (i % 1) == 0 ? 110 : 5)
                             .offset(y: 70)
                             .rotationEffect(.init(degrees: 135))
-                            
+                        
                     }
                     .rotationEffect(Angle(degrees: Double(selectedGMT * 15)))
-                    
-                    
                     
                     ForEach(0 ..< 60, id: \.self) { i in
                         // hours dots...
                         Rectangle()
                             .fill(Color.primary)
-                        
-                        // 60 / 12 = 5
                             .frame(width: 2, height: (i % 1) == 0 ? 15 : 5)
                             .offset(y: (width - 110) / 2)
                             .rotationEffect(.init(degrees: Double(i) * 15))
                         // seconds dots
                         Rectangle()
                             .fill(Color.primary)
-                        // 60 / 12 = 5
                             .frame(width: 1, height: (i % 5) == 0 ? 5 : 5)
                             .offset(y: (width - 140) / 2)
                             .rotationEffect(.init(degrees: Double(i) * 6))
                     }
-                    
-                    
-                    
-                    
                     // min
                     RoundedRectangle(cornerRadius: .infinity)
                         .fill(Color.primary)
                         .frame(width: 4, height: (width - 150) / 2)
                         .offset(y: -(width - 280) / 2)
-                    //                    .rotationEffect(.init(degrees: Double(current_Time.min) * 6))
                         .rotationEffect(Angle(degrees: minutesAngle))
                     
                     // Hour
@@ -172,7 +133,6 @@ struct Home: View {
                         .fill(Color.primary)
                         .frame(width: 10, height: 10)
                     
-                    
                     // sec
                     Rectangle()
                         .frame(width: 2, height: (width - 100) / 2)
@@ -182,7 +142,6 @@ struct Home: View {
                     Circle()
                         .frame(width: 10, height: 10)
                         .foregroundColor(.red)
-                    
                 }
                 // view clock
                 .frame(width: width - 80, height: width - 80)
@@ -191,69 +150,52 @@ struct Home: View {
                 .rotation3DEffect(offsetToAngle(), axis: (x: 0, y: 1, z: 0))
                 // optional
                 .rotation3DEffect(offsetToAngle(true) * 0.1, axis: (x: 0, y: 0, z: 1))
-
+                
                 // parallax
                 .gesture(
-                DragGesture()
-                    .onChanged({ value in
-                        offset3D = value.translation
-                    }).onEnded({ _ in
-                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.2, blendDuration: 0.2)) {
-                            offset3D = .zero
-                        }
-                    })
+                    DragGesture()
+                        .onChanged({ value in
+                            offset3D = value.translation
+                        }).onEnded({ _ in
+                            withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.2, blendDuration: 0.2)) {
+                                offset3D = .zero
+                            }
+                        })
                 )
                 
                 Spacer()
                 
+                Text("Selected GMT time:")
+                //                .font(.title)
+                    .font(.custom("DIN Condensed", size: 26))
+                    .foregroundColor(isDark ? Color("ColorLight") : Color("ColorDark"))
                 
-    
-                    Text("Selected GMT time:")
-                    //                .font(.title)
-                        .font(.custom("DIN Condensed", size: 26))
-                        .foregroundColor(isDark ? Color("ColorLight") : Color("ColorDark"))
-                    //                    .font(.system(size: 26))
-                    //                    .fontWeight(.light)
-                    //                    .padding(.bottom, 8)
-          
-                    Picker("", selection: $selectedGMT) {
-                        ForEach(-12..<13, id: \.self) { gmt in
-                            Text("GMT \(gmt > 0 ? "+\(gmt)" : "\(gmt)")")
-                        }
-                        .font(.title3)
+                Picker("", selection: $selectedGMT) {
+                    ForEach(-12..<13, id: \.self) { gmt in
+                        Text("GMT \(gmt > 0 ? "+\(gmt)" : "\(gmt)")")
                     }
-                    .pickerStyle(.inline)
-                    .frame(width: 310, height: 80, alignment: .center)
-                    .clipped()
-                    .padding(.top, 8)
-                    .padding(.bottom, 8)
-               
+                    .font(.title3)
+                }
+                .pickerStyle(.inline)
+                .frame(width: 310, height: 80, alignment: .center)
+                .clipped()
+                .padding(.top, 8)
+                .padding(.bottom, 8)
                 
-             
                 Text(getTime(for: Double(selectedGMT)))
                     .font(.system(size: 28))
-                //                    .font(.custom("DIN Condensed", size: 24))
                     .fontWeight(.bold)
-                //                    .padding(.top, 8)
                 
-                //            .padding()
-            
                 HStack(alignment: .center, spacing: 250) {
-           
-                    //                    Spacer()
                     
                     Button(action: { isDark.toggle() }) {
                         Image(systemName: isDark ? "sun.min.fill" : "moon.fill")
                             .font(.system(size: 15))
                             .foregroundColor(isDark ? Color("MiddleEasternSession") : .black)
                             .padding()
-//                            .background(Color.primary)
                             .background(Color("ColorLight"))
                             .clipShape(Circle())
-                        //                            .shadow(color: Color(#colorLiteral(red: 0.9803921569, green: 0.3921568627, blue: 0, alpha: 1)).opacity(0.6), radius: 15, y: 5)
                     }
-                    
-                    
                     
                     Button(action: {
                         self.showDetail.toggle()
@@ -262,29 +204,19 @@ struct Home: View {
                             .font(.system(size: 15))
                             .foregroundColor(Color("EuropeSession"))
                             .padding()
-//                            .background(Color.primary)
                             .background(Color("ColorLight"))
                             .clipShape(Circle())
-                        //                            .foregroundColor(.white)
-                        //                            .frame(width: 169, height: 42)
-                        //                            .background(Color(#colorLiteral(red: 0.9803921569, green: 0.3921568627, blue: 0, alpha: 1)))
-                        //                            .cornerRadius(20)
-                        //                            .shadow(color: Color(#colorLiteral(red: 0.9803921569, green: 0.3921568627, blue: 0, alpha: 1)).opacity(0.6), radius: 10, y: 10)
-                        
                     }
                 }
-                
             }
-            
             .onAppear(perform: {
                 let calendar = Calendar.current
-
+                
                 let min = calendar.component(.minute, from: Date())
                 let sec = calendar.component(.second, from: Date())
                 let hour = calendar.component(.hour, from: Date())
-
+                
                 withAnimation(Animation.linear(duration: 0.01)) {
-
                     self.current_Time = Time(min: min, sec: sec, hour: hour)
                 }
             })
@@ -297,30 +229,25 @@ struct Home: View {
                 let hour = calendar.component(.hour, from: Date())
                 
                 withAnimation(Animation.linear(duration: 0.01)) {
-                    
                     self.current_Time = Time(min: min, sec: sec, hour: hour)
                 }
-                
-        }
-        
+            }
             
             InfoView(showDetail: $showDetail)
                 .offset(y: showDetail ? 0 : 900)
                 .animation(.spring(response: 0.6, dampingFraction: 0.6, blendDuration: 0))
-            
-            
         }
         .background(isDark ? editImage("6221798", 1400, 1000) : editImage("6547182", 1400, 1000))
     }
-       private func getTime(for gmtOffset: Double) -> String {
-            let format = DateFormatter()
-            format.dateFormat = "HH:mm:ss"
-            let timeZone = TimeZone(secondsFromGMT: Int(gmtOffset * 3600))
-            format.timeZone = timeZone
-            
-            return format.string(from: Date())
-        }
     
+    private func getTime(for gmtOffset: Double) -> String {
+        let format = DateFormatter()
+        format.dateFormat = "HH:mm:ss"
+        let timeZone = TimeZone(secondsFromGMT: Int(gmtOffset * 3600))
+        format.timeZone = timeZone
+        
+        return format.string(from: Date())
+    }
     
     // Converting offset into X Y Angle - paralaxx
     func offsetToAngle(_ isVertical: Bool = false) -> Angle {
@@ -350,10 +277,9 @@ struct Home: View {
     }
     
 }
-                        
+
 struct Time {
     var min: Int
     var sec: Int
-     var hour: Int
+    var hour: Int
 }
-
