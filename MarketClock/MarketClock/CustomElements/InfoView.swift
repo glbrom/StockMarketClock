@@ -17,7 +17,6 @@ struct InfoView: View {
                 HStack(alignment: .center, spacing: 12) {
                     Spacer(minLength: 55)
                     Text("Stock session exchange ")
-                    //                        .font(.title)
                         .font(.custom("DIN Condensed", size: 30))
                         .foregroundColor(Color("ColorLight"))
                         .fontWeight(.light)

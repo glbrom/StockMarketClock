@@ -32,14 +32,7 @@ struct Home: View {
     
     var width = UIScreen.main.bounds.width
     var hoursAngle: Double {
-        //        var localHour = Double(current_Time.hour - 3 + selectedGMT)
         let localHour = Double(current_Time.hour)
-        //        var localHour = Double(getTime(for: Double(selectedGMT)))
-        //                if localHour < 0 {
-        //                    localHour += 24
-        //                } else if localHour >= 24 {
-        //                    localHour -= 24
-        //                }
         return localHour * 15 + 12.5 * Double(current_Time.min) / 60
     }
     
@@ -166,7 +159,6 @@ struct Home: View {
                 Spacer()
                 
                 Text("Selected GMT time:")
-                //                .font(.title)
                     .font(.custom("DIN Condensed", size: 26))
                     .foregroundColor(isDark ? Color("ColorLight") : Color("ColorDark"))
                 
